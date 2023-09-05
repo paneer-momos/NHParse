@@ -158,7 +158,7 @@ class GSV extends NMEASentence {
             try {
                 return Integer.parseInt(str);
             } catch (NumberFormatException e) {
-                return Integer.MIN_VALUE; // Return a sentinel value indicating parsing failure
+                return Integer.MIN_VALUE; // Return an integer to indicate failure
             }
     }
 
@@ -250,7 +250,7 @@ public class NmeaParse{
             e.printStackTrace();
         }  
     }
-
+    //Method to find a sentence in a line if not found at the start of the line
     private boolean containsSentence(String line) {
         if(line.contains("$")){
             String[] parts = line.split("\\$");
@@ -259,8 +259,8 @@ public class NmeaParse{
         }
         return false;
     }
-
+    //Implemented main function for testing. 
     public static void main(String[] args){
-        NmeaParse obj1 = new NmeaParse("C:\\Users\\02rak\\OneDrive\\Documents\\NHParse\\nhparse\\src\\main\\java\\com\\nhparse\\sample_nmea.log");
+        NmeaParse obj1 = new NmeaParse("C:\\Users\\02rak\\OneDrive\\Documents\\NHParse\\nhparse\\src\\main\\java\\com\\nhparse\\sample_nmea.log"); //Reading directly from log file for testing. 
     }
 }
