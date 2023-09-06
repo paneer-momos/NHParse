@@ -207,8 +207,7 @@ class GSV extends NMEASentence {
             startIndex += 4;
         }
     }
-<<<<<<< HEAD
-=======
+
         private int tryParseInt(String str) {
             try {
                 return Integer.parseInt(str);
@@ -217,7 +216,6 @@ class GSV extends NMEASentence {
             }
     }
 
->>>>>>> 7d69c40942510e546d1d8a5dcf5b7f939c77e7bb
 
     @Override
     void printDetails() {
@@ -360,13 +358,5 @@ public class NmeaParse{
         }
         return false;
     }
-<<<<<<< HEAD
 
 }
-=======
-    //Implemented main function for testing. 
-    public static void main(String[] args){
-        NmeaParse obj1 = new NmeaParse("C:\\Users\\02rak\\OneDrive\\Documents\\NHParse\\nhparse\\src\\main\\java\\com\\nhparse\\sample_nmea.log"); //Reading directly from log file for testing. 
-    }
-}
->>>>>>> 7d69c40942510e546d1d8a5dcf5b7f939c77e7bb
