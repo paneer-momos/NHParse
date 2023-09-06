@@ -13,16 +13,23 @@ class GGA extends NMEASentence {
     private String time;
     private String latitude;
     private String longitude;
-    private double altitude;
-
+    private String altitude;
+    private String gga_satellites;
+    private String gga_alt_msl;
+    private String gga_geo_sep;
+    private static final int GGA_SATTELLITES_IN_USE = 7;
+    private static final int GGA_ALT_MSL = 9 ;
+    private static final int GGA_GEOIDAL_SEPARATION = 11;
     @Override
     void parse(String[] tokens) {
         talker = tokens[0];
         time = tokens[1];
         latitude = tokens[2] + " " + tokens[3];
         longitude = tokens[4] + " " + tokens[5];
-        altitude = Double.parseDouble(tokens[9].replace(" M", ""));
-
+        altitude = tokens[9].replace(" M", "");
+        gga_satellites = tokens[GGA_SATTELLITES_IN_USE];
+        gga_alt_msl = tokens[GGA_ALT_MSL];
+        gga_geo_sep = tokens[GGA_GEOIDAL_SEPARATION];
     }
 
     @Override
@@ -34,39 +41,81 @@ class GGA extends NMEASentence {
         System.out.println("Altitude: " + altitude);
     }
 
-    public double getAltitude() {
+    public String getAltitude() {
         return altitude;
+    }
+
+    public String getSatellitesInUse(){
+        return gga_satellites;
+    }
+
+    public String getALT_MSL(){
+        return gga_alt_msl;
+    }
+
+    public String getGeoSep(){
+        return gga_geo_sep;
     }
 }
 //RMC SENTENCE CLASS
 class RMC extends NMEASentence {
     private String talker;
     private String time;
-    private String status;
-    private String latitude;
-    private String longitude;
-    private String speed;
-    private String date;
+    private static final int UTC_TIME = 1;
+    private String RMC_LATTITUDE;
+    private String RMC_LONGITUDE;
+    private int RMC_SPEED = 7;
+    private String rmc_cogh;
+    private String rmc_date;
+    private String rmc_speed;
+    private static final int RMC_DATE = 9;
+    private static final int RMC_COURSE_OVER_GROUND_HEADING = 8;
 
     @Override
     void parse(String[] tokens) {
         talker = tokens[0];
         time = tokens[1];
-        status = tokens[2];
-        latitude = tokens[3] + " " + tokens[4];
-        longitude = tokens[5] + " " + tokens[6];
-        speed = tokens[7];
-        date = tokens[9];
-    }
+        //status = tokens[2];
+        RMC_LATTITUDE = tokens[3] + " " + tokens[4];
+        RMC_LONGITUDE = tokens[5] + " " + tokens[6];
+        rmc_speed = tokens[RMC_SPEED];
+        rmc_cogh = tokens[RMC_COURSE_OVER_GROUND_HEADING];
+        rmc_date = tokens[RMC_DATE];
+        }
 
     @Override
     void printDetails() {
         System.out.println(talker);
-        System.out.println("Time: " + time);
-        System.out.println("Status: " + status);
-        System.out.println("Latitude: " + latitude);
-        System.out.println("Longitude: " + longitude);
-        System.out.println("Speed: " + speed);
+        System.out.println("Time: " + UTC_TIME);
+        System.out.println("Latitude: " + RMC_LATTITUDE);
+        System.out.println("Longitude: " + RMC_LONGITUDE);
+        System.out.println("Speed: " + RMC_SPEED);
+        System.out.println("Date: " + RMC_DATE);
+        System.out.println("Course over ground heading: " + RMC_COURSE_OVER_GROUND_HEADING);
+    }
+
+    public String getTime(){
+        return time;
+    }
+
+    public String getDate(){
+        return rmc_date;
+    }
+
+    public String getRMCLattitude(){
+        return RMC_LATTITUDE;
+    }
+
+    public String getRMCLongitude(){
+        return RMC_LONGITUDE;
+    }
+
+    public String getRMCSpeed(){
+        return rmc_speed;
+    }
+
+    public String getRMC_COURSE_OVER_GROUND(){
+        return rmc_cogh;
     }
 
 }
@@ -74,17 +123,19 @@ class RMC extends NMEASentence {
 class GSA extends NMEASentence {
     private String talker;
     private String mode;
-    private String fixType;
+    private int GSA_FIX_QUALITY_FACTOR = 2;
     private String[] satellitePRNs;
-    private String pdop;
-    private String hdop;
-    private String vdop;
+    private static final int GSA_PDOP = 15;
+    private static final int GSA_HDOP = 16;
+    private static final int GSA_VDOP = 17;
+    private String pdop, hdop, vdop;
+    private String gsa_fix;
 
     @Override
     void parse(String[] tokens) {
         talker = tokens[0];
         mode = tokens[1];
-        fixType = tokens[2];
+        gsa_fix = tokens[GSA_FIX_QUALITY_FACTOR];
         satellitePRNs = new String[12];
         for (int i = 0; i < 12; i++) {
             if (i < tokens.length - 3) {
@@ -93,75 +144,69 @@ class GSA extends NMEASentence {
              satellitePRNs[i] = ""; // Empty string for missing PRNs
         }
         }
-        try{
-        pdop = tokens[15];
-        hdop = tokens[16];
-        vdop = tokens[17];
-        } catch(ArrayIndexOutOfBoundsException e){
-            if(pdop==null){
-                pdop = hdop = vdop ="";
-            }
-            else if(hdop==null){
-                hdop = vdop = "";
-            }
-            else{
-                vdop = "";
-            }
-        }
+        
+            pdop = tokens[GSA_PDOP];
+            hdop = tokens[GSA_HDOP];
+            vdop = tokens[GSA_VDOP];
     }
 
     @Override
     void printDetails() {
         System.out.println(talker);
         System.out.println("Mode: " + mode);
-        System.out.println("Fix Type: " + fixType);
+        System.out.println("Fix Type: " + GSA_FIX_QUALITY_FACTOR);
         System.out.println("Satellite PRNs: " + Arrays.toString(satellitePRNs));
         System.out.println("PDOP: " + pdop);
         System.out.println("HDOP: " + hdop);
         System.out.println("VDOP: " + vdop);
     }
+
+    public String getFix(){
+        return gsa_fix;
+    }
+
+    public String getPDOP(){
+        return pdop;
+    }
+
+    public String getHDOP(){
+        return hdop;
+    }
+
+    public String getVDOP(){
+        return vdop;
+    }
+      
 }
 
 // GSV SENTENCE CLASS
 class GSV extends NMEASentence {
     private String talker;
-    private int totalMessages;
-    private int messageNumber;
-    private int totalSatellites;
+    private String totalMessages;
+    private String messageNumber;
+    private String totalSatellites;
     private List<SatelliteInfo> satellites;
 
     @Override
     void parse(String[] tokens) {
         talker = tokens[0];
-        totalMessages = Integer.parseInt(tokens[1]);
-        messageNumber = Integer.parseInt(tokens[2]);
-        totalSatellites = Integer.parseInt(tokens[3]);
+        totalMessages = tokens[1];
+        messageNumber = tokens[2];
+        totalSatellites = tokens[3];
 
         satellites = new ArrayList<>();
         int startIndex = 4;
-        while (startIndex +3 < tokens.length) {
-            int prn = tryParseInt(tokens[startIndex]);
-            int elevation = tryParseInt(tokens[startIndex + 1]);
-            int azimuth = tryParseInt(tokens[startIndex + 2]);
-            int snr = tryParseInt(tokens[startIndex + 3]);
-            
-            if (prn != Integer.MIN_VALUE && elevation != Integer.MIN_VALUE &&
-                azimuth != Integer.MIN_VALUE && snr != Integer.MIN_VALUE) {
-                satellites.add(new SatelliteInfo(prn, elevation, azimuth, snr));
-            }
-    
+        while (startIndex + 3 < tokens.length) {
+            String prn = tokens[startIndex];
+            String elevation = tokens[startIndex + 1];
+            String azimuth = tokens[startIndex + 2];
+            String snr = tokens[startIndex + 3];
+
+            satellites.add(new SatelliteInfo(prn, elevation, azimuth, snr));
+
             startIndex += 4;
-            
         }
     }
-        private int tryParseInt(String str) {
-            try {
-                return Integer.parseInt(str);
-            } catch (NumberFormatException e) {
-                return Integer.MIN_VALUE; // Return a sentinel value indicating parsing failure
-            }
-    }
-
 
     @Override
     void printDetails() {
@@ -177,28 +222,73 @@ class GSV extends NMEASentence {
     public List<SatelliteInfo> getSatellites() {
         return satellites;
     }
+
+    public String getTotalSatellitesInView() {
+        return totalSatellites;
+    }
+
+    public List<String> getAzimuthValues() {
+        List<String> azimuthValues = new ArrayList<>();
+        for (SatelliteInfo satellite : satellites) {
+            azimuthValues.add(satellite.getAzimuth());
+        }
+        return azimuthValues;
+    }
+
+    public List<String> getElevationValues() {
+        List<String> elevationValues = new ArrayList<>();
+        for (SatelliteInfo satellite : satellites) {
+            elevationValues.add(satellite.getElevation());
+        }
+        return elevationValues;
+    }
+
+    public List<String> getSignalStrengthValues() {
+        List<String> signalStrengthValues = new ArrayList<>();
+        for (SatelliteInfo satellite : satellites) {
+            signalStrengthValues.add(satellite.getSignalStrength());
+        }
+        return signalStrengthValues;
+    }
 }
 
 class SatelliteInfo {
-    private int prn;
-    private int elevation;
-    private int azimuth;
-    private int snr;
+    private String prn;
+    private String elevation;
+    private String azimuth;
+    private String snr;
 
-    public SatelliteInfo(int prn, int elevation, int azimuth, int snr) {
+    public SatelliteInfo(String prn, String elevation, String azimuth, String snr) {
         this.prn = prn;
         this.elevation = elevation;
         this.azimuth = azimuth;
         this.snr = snr;
     }
+
+    public String getPrn() {
+        return prn;
+    }
+
+    public String getElevation() {
+        return elevation;
+    }
+
+    public String getAzimuth() {
+        return azimuth;
+    }
+
+    public String getSignalStrength() {
+        return snr;
+    }
 }
 
+
 public class NmeaParse{
-    private String filePath;
+    private File file;
     private List<Map<String, Object>> segments;
     public String line;
-    public NmeaParse(String filePath) {
-        this.filePath = filePath;
+    public NmeaParse(File file) {
+        this.file = file;
         this.segments = new ArrayList<>();
         parseNmeaFile();
     }
@@ -214,7 +304,7 @@ public class NmeaParse{
         sentenceTypeMap.put("GSA", GSA.class);
         sentenceTypeMap.put("GSV", GSV.class);
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             
            // List<String> segment = new ArrayList<>();
             //boolean insideSegment = false;
@@ -260,7 +350,4 @@ public class NmeaParse{
         return false;
     }
 
-    public static void main(String[] args){
-        NmeaParse obj1 = new NmeaParse("C:\\Users\\02rak\\OneDrive\\Documents\\NHParse\\nhparse\\src\\main\\java\\com\\nhparse\\sample_nmea.log");
-    }
 }

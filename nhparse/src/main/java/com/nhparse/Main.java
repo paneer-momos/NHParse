@@ -62,7 +62,9 @@ public class Main {
         int returnValue = fileChooser.showOpenDialog(null);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+            File selectedHamsaFile = fileChooser.getSelectedFile();
+
+            HamsaHandler(selectedHamsaFile);
         }
     });
 
@@ -71,7 +73,8 @@ public class Main {
         int returnValue = fileChooser.showOpenDialog(null);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+            File selectedNmeaFile = fileChooser.getSelectedFile();
+            NmeaHandler(selectedNmeaFile);
         }
     });
 
@@ -79,5 +82,13 @@ public class Main {
         frame.pack();
         frame.setLocationRelativeTo(null);
         return frame;
+    }
+
+    private static void NmeaHandler(File selectedNmeaFile) {
+        NmeaParse np = new NmeaParse(selectedNmeaFile);
+    }
+
+    private static void HamsaHandler(File selectedHamsaFile) {
+        HmsaParse hp = new HmsaParse(selectedHamsaFile);
     }
 }
