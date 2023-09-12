@@ -65,6 +65,8 @@ public class Main {
             File selectedHamsaFile = fileChooser.getSelectedFile();
 
             HamsaHandler(selectedHamsaFile);
+
+            updateButtonOnUpload(uploadHmsaButton);
         }
     });
 
@@ -75,6 +77,7 @@ public class Main {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedNmeaFile = fileChooser.getSelectedFile();
             NmeaHandler(selectedNmeaFile);
+            updateButtonOnUpload(uploadNmeaButton);
         }
     });
 
@@ -83,6 +86,13 @@ public class Main {
         frame.setLocationRelativeTo(null);
         return frame;
     }
+
+    private static void updateButtonOnUpload(JButton button) {
+        //button.setEnabled(false); // Disable the button to prevent multiple uploads
+        button.setBackground(Color.GREEN); // Change the button color to green (or any desired color)
+        //button.setText(button.); // Change the button text to indicate success
+    }
+    
 
     private static void NmeaHandler(File selectedNmeaFile) {
         NmeaParse np = new NmeaParse(selectedNmeaFile);
