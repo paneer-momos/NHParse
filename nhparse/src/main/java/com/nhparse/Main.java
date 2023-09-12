@@ -88,9 +88,9 @@ public class Main {
     }
 
     private static void updateButtonOnUpload(JButton button) {
-        //button.setEnabled(false); // Disable the button to prevent multiple uploads
-        button.setBackground(Color.GREEN); // Change the button color to green (or any desired color)
-        //button.setText(button.); // Change the button text to indicate success
+        //button.setEnabled(false); 
+        button.setBackground(Color.GREEN); 
+        //button.setText(button.); 
     }
     
 
